@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--<link th:href="@{/css/main.css}" rel="stylesheet">-->
+<div  class="container-header" th:fragment="qwe">
+    <div class="container-header-inner">
+        <a href="/user/" class="logo">메디카우</a>
+        <div class="btn-group">
+            <ul>
+                <li sec:authorize="isAnonymous()"><a href="/hospital/members/login" class="hospital-btn">병원 관리자 로그인</a></li>
+                <li sec:authorize="isAuthenticated()"><a href="/user/member/reservation/">예약내역</a></li>
+                <li sec:authorize="isAnonymous()"><a href="/user/members/login">로그인</a></li>
+                <li sec:authorize="isAuthenticated()"><a href="/user/members/logout">로그아웃</a></li>
+                <li sec:authorize="isAuthenticated()"><a href="/user/members/meUpdate">내 정보 수정</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</html>

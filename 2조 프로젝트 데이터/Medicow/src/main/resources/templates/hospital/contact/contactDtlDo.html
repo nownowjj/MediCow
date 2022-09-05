@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <title>Title</title>
+</head>
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+    $(document).ready(function(){
+        var updateMessage = [[${updateMessage}]];
+            if(updateMessage != null){
+                alert(updateMessage);
+                console(updateMessage);
+            }
+    });
+<!--        function deleteContact(id) {-->
+<!--            var token = $("meta[name='_csrf']").attr("content");-->
+<!--            var header = $("meta[name='_csrf_header']").attr("content");-->
+
+<!--            var url = "/hospital/my/contact/" + orderId + "/delete";-->
+<!--            var paramData = {-->
+<!--                id : id,-->
+<!--            };-->
+
+<!--            var param = JSON.stringify(paramData);-->
+
+<!--            $.ajax({-->
+<!--                url      : url,-->
+<!--                type     : "POST",-->
+<!--                contentType : "application/json",-->
+<!--                data     : param,-->
+<!--                beforeSend : function(xhr){-->
+<!--                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */-->
+<!--                    xhr.setRequestHeader(header, token);-->
+<!--                },-->
+<!--                dataType : "json",-->
+<!--                cache   : false,-->
+<!--                success  : function(result, status){-->
+<!--                    alert("주문이 취소 되었습니다.");-->
+<!--                    location.href='/orders/' + [[${page}]];-->
+<!--                },-->
+<!--                error : function(jqXHR, status, error){-->
+<!--                    if(jqXHR.status == '401'){-->
+<!--                        alert('로그인 후 이용해주세요');-->
+<!--                        location.hrefㅌ='/members/login';-->
+<!--                    } else{-->
+<!--                        alert(jqXHR.responseText);-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+    </script>
+
+</th:block>
+<body>
+
+<div layout:fragment="content">
+    <form th:action="@{'/hospital/my/contact/'+${data.id}}" role="form" method="post" th:object="${data}">
+        <table class="table table-hover">
+            <tr>
+                <th>게시판 번호</th>
+                <td th:text="*{id}">응 없~</td>
+            </tr>
+            <!--            게시판 번호는 알아서 생성될 예정-->
+            <!--            <tr>-->
+            <!--                <th>작성자</th>-->
+            <!--                &lt;!&ndash;            <th th:text="${contactFromDto.hosName}"></th>&ndash;&gt;-->
+            <!--                <th>작성일자</th>-->
+            <!--                <th th:field="*{reqTime}" th:text="*{regTime}"></th>-->
+            <!--            </tr>-->
+            <tr>
+                <th>작성일자</th>
+                <td th:text="${#temporals.format(data.regTime, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            <tr>
+                <th>답변 여부</th>
+                <td th:text="*{contactStatus}"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td th:text="*{hospital.hosId}"></td>
+            </tr>
+
+            <div th:if="${#strings.equals(data.contactStatus, 'NO')}">
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" th:field="*{subject}"  placeholder="제목을 입력해주세요"></td>
+                </tr>
+            </div>
+
+
+            <div th:if="${#strings.equals(data.contactStatus, 'YES')}">
+                <tr>
+                    <th>제목</th>
+                    <td><input type="text" th:field="*{subject}"  style="background-color:white" readonly="readonly" placeholder="제목을 입력해주세요"></td>
+                </tr>
+            </div>
+
+            <div th:if="${#strings.equals(data.contactStatus, 'NO')}">
+                <tr>
+                    <th>내가 쓴 문의</th>
+                    <td>
+                    <textarea type="text" th:field="*{content}" class="form-control" rows="10" id="testNo"
+                              placeholder="내용을 입력해주세요"></textarea>
+                    </td>
+                </tr>
+            </div>
+
+            <div th:if="${#strings.equals(data.contactStatus, 'YES')}">
+                <tr>
+                    <th>내가 쓴 문의</th>
+                    <td>
+                    <textarea type="text" th:field="*{content}" class="form-control" rows="10" id="testYes1"
+                              placeholder="내용을 입력해주세요" style="background-color:white" readonly="readonly"></textarea>
+                    </td>
+                </tr>
+            </div>
+
+
+            <div th:if="${#strings.equals(data.contactStatus, 'YES')}">
+                <!--            <div th:if="${#strings.equals(contactStatus, 'YES')}">안됨-->
+                <!--            <div>-->
+                <tr>
+                    <th>관리자 답변</th>
+                    <td>
+                    <textarea type="text" th:field="*{adminContent}" class="form-control" rows="10" id="testYes2"
+                              placeholder="내용을 입력해주세요" style="background-color:white" readonly="readonly"></textarea>
+                    </td>
+                </tr>
+            </div>
+
+        </table>
+
+        <div th:unless="${#strings.equals(data.contactStatus, 'YES')}">
+            <button type="submit" class="btn btn-warning" th:formaction="'/hospital/my/contact/'+${data.id}+'/update'">수정하기</button>
+            <button type="submit" class="btn btn-danger" th:formaction="'/hospital/my/contact/'+${data.id}+'/delete'">삭제하기</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Main - Medicow Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="/bootstrap/css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="sb-nav-fixed">
+
+<!-- 공통 side bar -->
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-3" href="/admin/main">메디카우 시스템</a>
+    <!-- Sidebar Toggle-->
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+    <!-- Navbar Search-->
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        <div class="input-group">
+        </div>
+    </form>
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <li sec:authorize="isAuthenticated()"><a class="dropdown-item" href="/admin/logout">로그아웃</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">DATA</div>
+                    <a class="nav-link" href="/admin/main">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        대시보드
+                    </a>
+
+                    <!-- 데이터 관리 구간 -->
+                    <div class="sb-sidenav-menu-heading">Manager</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        회원 관리
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="/admin/member"><i class="fas fa-columns"></i>&nbsp;회원 목록</a>
+                            <a class="nav-link" href="/admin/hospital"><i class="fas fa-columns"></i>&nbsp;병원 목록</a>
+                        </nav>
+                    </div>
+                    <!-- 차트 구간 -->
+                    <a class="nav-link" href="/admin/review">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        리뷰 삭제 요청
+                    </a>
+
+                    <!-- 문의 전체 -->
+                    <div class="sb-sidenav-menu-heading">Notice</div>
+                    <a class="nav-link" href="/admin/contactad">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        문의사항
+                    </a>
+                    <a class="nav-link" href="/admin/notice">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        공지사항
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">환영합니다.</div>
+                관리자 페이지
+            </div>
+        </nav>
+    </div>
+    <!-- 여기까지가 side bar -->
+    <!--    여기서부터 내가 만져야해!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="container mt-3">
+                    <h1 class="mt-4">   </h1>
+
+                    <br/>
+                    <div>
+
+                        <form role="form" method="post" th:object="${noticeFormDto}">
+
+                            <p class="h2" th:if="${#strings.isEmpty(noticeFormDto.id)}" >
+                                공지 등록
+                            </p>
+                            <p class="h2" th:unless="${#strings.isEmpty(noticeFormDto.id)}" >
+                                공지 수정
+                            </p>
+                            <br/>
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{regTime}">
+
+                            <!--                    나중에 카테고리<div class="form-group">-->
+                            <!--                        <select th:field="*{noticeSellStatus}" class="custom-select">-->
+                            <!--                            <option value="SELL">판매중</option>-->
+                            <!--                            <option value="SOLD_OUT">품절</option>-->
+                            <!--                        </select>-->
+                            <!--                    </div>-->
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">제목</span>
+                                </div>
+                                <input type="text" th:field="*{subject}" class="form-control" placeholder="제목을 입력해주세요">
+                            </div>
+                            <p th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}" class="fieldError">Incorrect data</p>
+
+                            <br/>
+
+                            <!--                    <div class="input-group">-->
+                            <!--                        <div class="input-group-prepend">-->
+                            <!--                            <span class="input-group-text">내용</span>-->
+                            <!--                        </div>-->
+                            <!--                        <input type="text" th:field="*{content}" class="form-control" placeholder="내용을 입력해주세요">-->
+                            <!--                    </div>-->
+                            <!--                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError">Incorrect data</p>-->
+
+
+                            <label for="test">내용:</label>
+                            <textarea type="text" th:field="*{content}" class="form-control" rows="10" id="test" name="text" placeholder="내용을 입력해주세요"></textarea>
+                            <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError">Incorrect data</p>
+
+
+                            <!-- for insert -->
+
+                            <!-- for update -->
+                            <br/><br/>
+                            <div th:if="${#strings.isEmpty(noticeFormDto.id)}" style="text-align: center">
+                                <button th:formaction="@{/admin/notice/new}" type="submit" class="btn btn-primary" onclick="getHtml();">등록</button>
+                            </div>
+
+
+
+                            <div th:unless="${#strings.isEmpty(noticeFormDto.id)}" style="text-align: center">
+                                <button th:formaction="@{'/admin/noticeForm/' + ${noticeFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
+                            </div>
+
+
+
+
+
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        </form>
+                    </div></div></div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-notices-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; 메디카우 2022</div>
+                    <div>
+                        <a>Privacy Policy</a>
+                        &middot;
+                        <a>Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script>
+	function getHtml(){
+		var html = $("#test").val().replace(/(?:\r\n|\r|\n)/g, '<br />');
+		$("#result").html(html);
+		$("#raw").text(html);
+	}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/bootstrap/js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/bootstrap/assets/demo/chart-area-demo.js"></script>
+<script src="/bootstrap/assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/bootstrap/js/datatables-simple-demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+#map {
+    width: 100%;
+    height: 100%;
+}
+.list_page_section{
+    margin: 0 auto;
+    /* border: 1px solid black; */
+    width: 960px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    margin-top:60px;
+}
+.list_page_section .list_area{
+    width: 55%;
+    height: 200vh;
+    /* border: 1px solid red; */
+    /* padding: 0px 20px 0px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.list_page_section #map{
+    max-width: 45%;
+    /* margin: 15px 0px; */
+    height: 850px;
+    position: sticky;
+    /* 스크린 스크롤시 map은 고정 */
+    top: 60px;
+}
+.list_page_section .list_area .list{
+    width: 90%;
+    height: 270px;
+    border: 1px solid #c4c9cf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.list_page_section .list_area .list .hospital_name{
+    width: 100%;
+    height: 30px;
+    border: 1px solid black
+}

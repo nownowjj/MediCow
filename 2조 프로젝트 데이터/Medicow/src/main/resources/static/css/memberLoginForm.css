@@ -1,0 +1,108 @@
+*{margin: 0; padding: 0; box-sizing: border-box; list-style-type:none ;} button{cursor: pointer;}
+a{text-decoration:none; color:black; }
+
+.login_container{
+    display: flex;
+    flex: 1;
+    width: 100%;
+    height: 100vh;
+
+}
+.user_login_container{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e8e8e815;
+}
+.user_login_container form{
+    /* border: 1px solid; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 70%;
+    height: 80%;
+    box-shadow: rgb(0 0 0 / 8%) 0px 16px 32px 0px;
+}
+.user_login_container form h2{
+    width: 100%;
+    text-align: center;
+    font-size: 48px;
+    margin: 50px 0px 5px 0px;
+}
+.user_login_container form input{
+    width: 80%;
+    height: 40px;
+    /* padding: 10px; */
+    outline: none;
+    border: 1px solid #e8e8e8;
+    /* background-color: rgba(182, 168, 168, 0.09); */
+    background-color: white;
+    margin: 10px 0px;
+    font-size: 18px;
+    padding-left: 10px;
+}
+.user_login_container form .error{
+    /* border: 1px solid black; */
+    width: 80%;
+    height: 30px;
+    line-height: 30px;
+    color: red;
+}
+.user_login_container form button{
+    width: 80%;
+    height: 50px;
+    border: none;
+    font-size: 18px;
+    margin-top: 40px;
+    /* color: #424242; */
+    background-color: rgb(255, 237, 73);
+    transition: 0.2s;
+}
+.user_login_container form button:hover{
+    background: linear-gradient(to right,orange , yellow);
+}
+
+.user_register_container{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column;
+    /*padding-top: 180px;*/
+    /* background: linear-gradient(to bottom right, #e8e8e8, yellow); */
+    background: linear-gradient(to bottom right, orange, yellow,white   );
+}
+.user_register_container img{
+    width: 300px;
+}
+.user_register_container h3{
+    font-size: 50px;
+    margin-top: 20px;
+
+}
+.user_register_container h5{
+    font-size: 18.5px;
+    margin-top: 30px;
+}
+.user_register_container button{
+    border: 2px solid white;
+    background-color: white;
+    color: black;
+    width: 200px;
+    height: 40px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    border-radius:20px;
+    margin-top: 40px;
+    cursor: pointer;
+    transition: 0.5s;
+    font-weight: 500;
+
+}
+.user_register_container button:hover{
+    font-size: 22px;
+}

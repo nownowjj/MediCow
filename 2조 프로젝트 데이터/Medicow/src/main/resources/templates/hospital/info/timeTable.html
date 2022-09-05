@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+<div layout:fragment="content">
+  <h2>병원 운영시간</h2>
+  <form th:action="@{'/hospital/info/time'}" role="form" method="get" th:object="${dayTableDtos}">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>요일</th>
+        <th>시작시간</th>
+        <th>~</th>
+        <th>마감시간</th>
+        <th>휴일여부</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="dayTableDto, status:${dayTableDtos}">
+        <td th:text="${dayTableDto.dayStatus}"></td>
+        <td th:text="${dayTableDto.startDateTime}"></td>
+        <td>~</td>
+        <td th:text="${dayTableDto.endDateTime}"></td>
+        <td th:text="${dayTableDto.workStatus}"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div th:if="${#strings.isEmpty(dayTableDtos)}">
+      <a class="btn btn-primary" href="/hospital/info/time/insert">입력하러가기</a>
+    </div>
+    <div th:if="${not #strings.isEmpty(dayTableDtos)}">
+      <a class="btn btn-primary" href="/hospital/info/time/update">수정하러가기</a>
+    </div>
+
+  </form>
+</div>

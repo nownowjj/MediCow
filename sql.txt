@@ -1,0 +1,53 @@
+
+
+-----------------------------------------------------------------------------------------------
+SELECT * 
+FROM (
+SELECT ( 6371 * acos( cos( radians( 37.4737886190276 ) ) * cos( radians( hos_posy) ) * cos( radians( hos_posx ) - radians(126.846099837591) ) +
+sin( radians(37.4737886190276) ) * sin( radians(hos_posy) ) ) ) AS distance ,hos_name,hos_address
+FROM hospital
+ORDER BY distance asc
+) DATA
+WHERE DATA.distance < 3  and ROWNUM < 50 ;
+--order by  distance asc;
+-- 순서대로 (사용자 위도) , (병원위도) , (병원경도) , (사용자 경도) , (사용자 위도) ,(병원위도)
+--------------`----------------------------------------------------------------------------------/*  rownum < 10*/
+
+select distinct *
+from Hospital
+where hos_Name like '%정형외과%' or hos_Subject like '%정형외과%';
+-- 검색 조건으로 검색
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+SELECT * 
+FROM (
+SELECT ( 6371 * acos( cos( radians( 37.4737886190276 ) ) * cos( radians( hos_posy) ) * cos( radians( hos_posx ) - radians(126.846099837591) ) +
+sin( radians(37.4737886190276) ) * sin( radians(hos_posy) ) ) ) AS distance ,hos_name,hos_address
+FROM (select distinct *
+from Hospital
+where hos_Name like '%정형외과%' or hos_Subject like '%정형외과%')
+ORDER BY distance asc
+) DATA
+WHERE DATA.distance < 3 ;
+--and ROWNUM < 50 ;
+
+
+
+
+-- 함수
+create or replace FUNCTION RADIANS(nDegrees IN NUMBER)
+
+RETURN NUMBER DETERMINISTIC
+
+IS
+
+BEGIN
+
+  RETURN nDegrees / 57.29577951308232087679815481410517033235;
+
+END RADIANS;
+
+
+

@@ -1,0 +1,112 @@
+.hospital_front1{
+width:100%;
+    height:100vh;
+    background: url(/image/hospitalFrontBackground.png) 100% 100% no-repeat;
+    background-size: cover;
+    top:0;
+    left:0;
+}
+.medi-cow{
+    margin-top:150px;
+}
+.text-area{
+    font-size: 52px;
+    font-weight: bold;
+    padding-top:50px;
+    line-height: 1.08;
+    letter-spacing: -2.6px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+#d01{
+    width:1000px;
+    height:566px;
+    padding:5px 60px;
+    box-sizing:border-box;
+    margin-left:112px;
+    margin-top:80px;
+    float:left;
+}
+.front-p{
+    color:#fff;
+    font-size:36px;
+    font-weight:400;
+    line-height:1.1;
+}
+#d02{
+    margin-top:36px;
+}
+.class="front-h4"{
+    border-radius : 17px;
+    width:175px;
+    color:#252525;
+    background-color:#fff;
+    margin-bottom: 15px;
+    padding: 7px 20px;
+    font-size: 15px;
+}
+#h04{
+    font-weight: bold;
+    font-size:25px;
+}
+#h01{
+    color:#fff;
+    background-color:#252525;
+}
+
+#d03{
+
+    width:300px;
+    height:566px;
+    padding:200px 60px;
+    box-sizing:border-box;
+    margin-right:112px;
+    margin-top:80px left;
+    float:left;
+}
+
+#front-under{
+    height:50vh;
+    top:100vh;
+    left:0;
+
+}
+
+.fud03{
+    width:447px; height:517px;
+    color:#333;
+    margin:30px auto;
+    margin-left:110px;
+    float:left;
+
+}
+.fud01{
+    width:447px; height:517px;
+    color:#333;
+    margin:30px auto;
+    margin-left:70px;
+    float:left;
+}
+
+.fud02{
+    width:447px; height:517px;
+    color:#333;
+    margin:30px auto;
+    float:left;
+    margin-left:200px;
+}
+
+.fud01-jpg{
+    display: block;
+    width:387px;
+    height:218px;
+    margin:30px;
+}
+.fud02-jpg{
+    width:218px;
+    height:218px;
+    margin:30px auto;
+}
+.front-h{
+    font-weight:bold;
+}

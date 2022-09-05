@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<th:block layout:fragment="css">
+    <style>
+        .container-header{
+            background-color: rgb(182 168 168 / 9%);
+        }
+        .container-header-inner a{
+            font-weight:bold;
+            font-size:16px;
+        }
+    </style>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            $("#searchBtn").on("click",function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
+
+        function page(page){
+            let searchSubject = $("#searchSubject").val();
+
+            location.href="/user/boards/" + page + "?searchSubject=" + searchSubject;
+        }
+    </script>
+
+</th:block>
+<!-- main.html content 영역 -->
+<div layout:fragment="content">
+
+    <!--첫번째 컨테이너-->
+    <div class="notice_container1">
+        <div class="notice_container1_text">
+            <h1>메디카우의 공지사항을 <br>알려드립니다</h1>
+        </div>
+        <div class="down_scroll">
+            <!--        <img th:src="@{image/main_scroll_udo_img.svg}"  alt="">-->
+            <img src="/image/main_scroll_udo_img.svg"  alt="">
+            <p>Scorll</p>
+        </div>
+    </div>
+    <!--첫번째 컨테이너 끝-->
+
+    <!-- 두번째 컨테이너-->
+    <div class="notice_container2">
+        <h1>공지사항</h1>
+        <form role="form" class="notice_form_box" method="get" th:object="${noticeBoards}">
+            <div class="">
+                <table class="notice_table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성일자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="noticeBoard, status: ${noticeBoards.getContent()}">
+                        <td th:text="${noticeBoard.id}"></td>
+                        <td>
+                            <a th:href="'/user/boards/noticeId/'+${noticeBoard.id}" th:text="${noticeBoard.subject}"></a>
+                        </td>
+                        <td  th:text="${#temporals.format(noticeBoard.regTime, 'yyyy-MM-dd HH:mm')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:with="start=${(noticeBoards.number/maxPage)*maxPage + 1}, end=(${(noticeBoards.totalPages == 0 ) ? 1 : (start + (maxPage - 1) < noticeBoards.totalPages ? start + (maxPage - 1) : noticeBoards.totalPages)})">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${noticeBoards.first}?'disabled'">
+                        <a th:onclick="'javascript:page(' + ${noticeBoards.number - 1} + ')'" aria-label='Previous' class="page-link">
+                            <span aria-hidden="true">Previous</span>
+                        </a>
+                    </li>
+
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${noticeBoards.number eq page-1}?'active':''">
+                        <a th:onclick="'javascrupt:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${noticeBoards.last}?'disabled'">
+                        <a th:onclick="'javascript:page(' + ${noticeBoards.number +1} + ')'" aria-label="Next" class="page-link">
+                            <span aria-hidden="true">Next</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="form-inline justify-content-center" th:object="${noticeSearchDto}">
+                <input th:field="*{searchSubject}" type="text" class="form-control" placeholder="공지사항 제목 검색">
+                <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+            </div>
+        </form>
+    </div>
+    <!-- 두번째 컨테이너 끝-->
+
+</div>
+</html>

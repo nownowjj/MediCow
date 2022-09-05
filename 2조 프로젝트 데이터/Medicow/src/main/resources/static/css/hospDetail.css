@@ -1,0 +1,109 @@
+
+.hospDetailContainer{
+    width:100%;
+
+    padding-top:60px;
+}
+.detailContainer{
+    width: 1024px;
+    height:
+    auto;
+    margin:0 auto;
+    padding-top:20px;
+}
+.hospital_name{
+   font-size: 28px;
+   font-weight: bold;
+   letter-spacing: -0.9px;
+   color: #000000;
+   margin: 50px 0px 10px 0px;
+}
+.hospital_address{
+    color: #494949;
+}
+.hospital_tel{
+    color: #494949;
+}
+.hospital_symptom{
+    width: 900px;
+    height: 40px;
+    /* margin: 45px 0px 10px; */
+    padding: 20px;
+    font-size: 16px;
+}
+.reservation_btn{
+    width: 120px;
+    flex-shrink: 0;
+    height: 47px;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #494949;
+    text-align: center;
+    /* padding-left: 80px; */
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    margin: 0 auto;
+    margin-left: 10px;
+}
+#map{
+    width: 100%;
+    height: 500px;
+    position: relative;
+    margin:40px 0;
+}
+
+.flex-wrap{
+display:flex;align-items: center;justify-content: space-between;padding: 20px 0;/* margin-bottom: 20px; *//* border-bottom: 1px solid #ccc; */}
+.addr-wrap > div{
+display:inline-block;
+}
+.addr-wrap span:nth-child(3){
+ /* padding-left:12px; */
+ /* margin-left:12px; */
+ /* border-left:1px solid #ccc; */
+}
+
+
+.contents{
+    display:flex;
+}
+.contents .left{
+    width: 480px;
+}
+.contents .right{
+    width:100%;
+    padding-top: 100px;
+    margin-left: 60px;
+}
+.right table{width:100%;
+    border-collapse: separate;
+    border-collapse: collapse;
+}
+.right table th{
+    font-size:18px;
+    font-weight:bold;
+    padding:15px 16px;
+    border-bottom:1px solid #000;
+    text-algin:center;
+}
+.right table td{
+    font-size:18px;
+    padding:15px 16px;
+    border-bottom:1px solid #ccc;
+}
+.scroll{max-height:500px; overflow-y:auto; }
+
+.hosImgDiv{
+    overflow-x: scroll;
+    width: 100%;
+    height: 295px;
+    overflow-x:hidden;
+}
+.hosImgClass{
+    display: inline;
+    height: 295px;
+    width: 300px;
+    float: left;
+}

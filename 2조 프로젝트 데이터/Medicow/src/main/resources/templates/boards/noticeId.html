@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link th:href="@{/css/notice.css}" rel="stylesheet" />
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+    </script>
+</th:block>
+<!-- main.html content 영역 -->
+<div layout:fragment="content">
+    <div class="notice_detail">
+        <div class="notice_detail_box">
+            <button class="back" onclick="history.back()">뒤로가기</button>
+            <h1>글제목 : <span th:text="${notice.id}"></span> 상세 페이지 입니다.</h1>
+            <div class="detail_header">
+                <div  th:text="${#temporals.format(notice.regTime, 'yyyy-MM-dd HH:mm')}" disabled="disabled" ></div>
+                <span>글 제목 : </span>
+                <span th:text="${notice.subject}"></span>
+            </div>
+            <div class="notice_contents" th:text="*{notice.content}" style="background-color:white" name="text" readonly="readonly"></div>
+
+        </div>
+    </div>
+</div>
+</html>

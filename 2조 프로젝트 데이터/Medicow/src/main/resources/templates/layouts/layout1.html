@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Title</title>
+
+    <!-- CSS only -->
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/memberLoginForm.css}" rel="stylesheet">
+    <link th:href="@{/css/mypage.css}" rel="stylesheet" />
+    <link th:href="@{/css/health.css}" rel="stylesheet" />
+    <link th:href="@{/css/notice.css}" rel="stylesheet" />
+
+
+    <!--Java Script-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="css">
+        <style>
+        .footer{
+            postision:relative;
+        }
+    </style>
+    </th:block>
+</head>
+<body>
+<div th:replace="include/header::qwe">
+</div>
+
+<div layout:fragment="content" class="content"></div>
+
+<div th:replace="include/footer::abc">
+</div>
+</body>
+</html>

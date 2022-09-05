@@ -1,0 +1,88 @@
+.hospFindContainer{
+    padding-top:60px;
+    width:100%;
+    height:auto;
+    display: flex;
+    justify-content: center;
+    position:relative;
+}
+.search_input_list{
+    width:50%;
+    height:auto;
+    position:relative;
+}
+.search-form-box{
+    border: 1px solid #e8e8e8;
+    background: white;
+    width:100%;
+    border-radius: 0px;
+}
+.search-form-box .searchQuery_input{
+    width: 70%;
+    height: 40px;
+    float: left;
+    border: 1px solid #e8e8e8;
+    padding: 15px;
+    font-size: 20px;
+    color: black;
+}
+.search-form-box .search_select{
+    height: 40px;
+    float: left;
+    border: 1px solid #e8e8e8;
+    width: 18%;
+}
+.search-form-box .search_submit{
+    height: 40px;
+    width: 12%;
+    border: none;
+    background: rgb(255, 237, 73);
+}
+.search-form-box .search_add{
+    clear: both;
+    margin: 5px 0px;
+}
+.form_fixed{
+    margin-top: 0px;
+    position: fixed;
+    width: 50%;
+}
+
+.list-table{
+    margin-top: 73px;
+    text-align: center;
+    border-left: 1px solid #e8e8e8;
+    border-right: 1px solid #e8e8e8;
+    border-collapse: collapse;
+    width:100%;
+}
+.list-table thead tr th{
+    height:35px;
+}
+.list-table tbody tr{
+    border-top:1px solid #e8e8e8;
+    height:50px;
+}
+.list-table tbody tr:last-child{
+    border-bottom:1px solid #e8e8e8;
+}
+.list-table tbody tr td:nth-child(5){
+    white-space:nowrap;
+    color:gray;
+}
+.list-table a{
+    font-weight:bold;
+    color:black;
+
+}
+#map{
+    width: 30%;
+    height: 878px;
+    position: sticky;
+    top: 60px;
+    margin-left: 50px;
+}
+
+.footer{
+    margin-top:100px;
+}

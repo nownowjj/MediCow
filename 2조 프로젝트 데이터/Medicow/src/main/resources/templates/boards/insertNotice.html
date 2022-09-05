@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- main.html content 영역 -->
+<div layout:fragment="content">
+    <form role="form" th:action="@{/user/boards/new}" method="post" th:object="${noticeBoardDto}">
+
+        <div class="login_container">
+            <div class="user_login_container">
+                <table>
+                    <tr>
+                        <th colspan="2" align="center">공지사항 작성</th>
+                    </tr>
+                    <tr>
+                        <td><label th:for="subject">제목</label></td>
+                        <td>
+                            <input type="text" th:field="*{subject}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label th:for="contents">내용</label></td>
+                        <td><input type="text" th:field="*{contents}" ></td>
+                    </tr>
+                    <tr>
+                        <td><label th:for="contents">사용자 ID</label></td>
+                        <td><input type="text" th:field="*{memberId}" ></td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2">
+                            <input type="submit" value="작성 완료">
+                            <input type="reset" value="작성 취소">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+</div>
+</html>

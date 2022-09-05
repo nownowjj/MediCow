@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <link th:href="@{/css/hospDetail.css}" rel="stylesheet" />
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=60df8648926600c987456a345237c908&libraries=services,clusterer"></script>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+  <th:block layout:fragment="script">
+    <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=60df8648926600c987456a345237c908&libraries=services,clusterer,drawing"></script>
+    <script th:inline="javascript">
+        function reservation(){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/user/reservation";
+            var paramData = {
+                hosId : $("#hosId").val(),
+                symptom : $("#symptom").val()
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : param,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+                    alert("예약이 완료 되었습니다.");
+                    location.href='/user/';
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href='/members/login';
+                    } else{
+                        alert(jqXHR.responseText);
+                    }
+
+                }
+            });
+        }
+    </script>
+  </th:block>
+
+
+</head>
+<div layout:fragment="content" class="hospDetailContainer">
+  <div class="detailContainer">
+
+    <div class="contents">
+      <div class="left">
+        <h1>병원상세페이지</h1>
+        <input type="hidden" th:field="${hospital.hosId}">
+        <div class="hospital_name" th:text="${hospital.hosName}"></div>
+        <div class="addr-wrap">
+          <div class="hosImgDiv">
+            <div th:each="hosImg: ${hospitalImgs}">
+              <img class="hosImgClass" th:if="${hosImg.imgUrl} != null"  th:src="${hosImg.imgUrl}">
+            </div>
+          </div>
+          <span>병원 이미지 </span><br><div class="" ></div><br>
+          <span>오시는 길 : </span><div class="hospital_address" th:text="${hospital.hosPath}"></div><br>
+          <span>주소 : </span><div class="hospital_address" th:text="${hospital.hosAddress}"></div><br>
+          <span>Tel : </span><div class="hospital_tel" th:text="${hospital.hosTel}"></div><br>
+          <span>상세 주소 : </span><div class="hospital_address" th:text="${hospital.hosDAddress}"></div><br>
+          <span>우편주소 : </span><div class="hospital_tel" th:text="${hospital.hosPostNum}"></div><br>
+        </div>
+
+        <div id="hosNo" th:text="${hospital.hosNo}" style="display:none;"></div>
+        <div class="flex-wrap">
+          <input class="hospital_symptom" type="text" name="symptom" id="symptom" placeholder="간단한 증상을 적어주세요">
+          <button type="button" class="reservation_btn" onclick="reservation()">예약 접수하기</button>
+        </div>
+      </div>
+
+
+      <!-- <div th:text="${hospital.hosPosX}"></div>
+       <div th:text="${hospital.hosPosY}"></div>-->
+      <div class="right">
+        <form role="form" th:object="${reservations}">
+          <div class="scroll">
+            <table>
+              <colgroup>
+                <col width="100px">
+                <col width="*">
+                <col width="150px">
+              </colgroup>
+              <tr>
+                <th>성함</th>
+                <th>리뷰 내용</th>
+                <th>리뷰 점수</th>
+              </tr>
+              <tr th:if="${reservations.getContent()} != null" th:each="reservation, status: ${reservations.getContent()}">
+                <td th:if="${reservation.review != null}">
+                  <label th:text="${reservation.member.name}"></label>
+                </td>
+                <td th:if="${reservation.review != null}">
+                  <label th:text="${reservation.review.content}"></label>
+                </td>
+                <td th:if="${reservation.review != null}">
+                  <label th:text="${reservation.review.point}"></label>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </form>
+
+        <div id="map"></div>
+      </div>
+    </div>
+
+
+  </div>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c6f9b7d5fd0fdb194944541b75e0e42e"></script>
+  <script th:inline="javascript">
+        var hos_x = [[${hospital}]].hosPosY;
+        var hos_y = [[${hospital}]].hosPosX;
+        var hos_title = [[${hospital}]].hosName;
+        console.log(hos_x , hos_y);
+
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(hos_x, hos_y), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 마커가 표시될 위치입니다
+        var markerPosition  = new kakao.maps.LatLng(hos_x, hos_y);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+
+        var iwContent = '<div style="padding:5px;"> '+ hos_title +'<br><a href="https://map.kakao.com/link/map/'+hos_title+','+hos_x+','+hos_y+'" style="color:#09091c;font-weight:bold;" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/'+hos_title+','+hos_x+','+hos_y+'" style="color:#09091c;font-weight:bold;" target="_blank">길찾기</a></div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            iwPosition = new kakao.maps.LatLng(hos_x, hos_y); //인포윈도우 표시 위치입니다
+
+        // 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            position : iwPosition,
+            content : iwContent
+        });
+
+        // 마커 위에 인포윈도우를 표시합니다. 두번째 파라미터인 marker를 넣어주지 않으면 지도 위에 표시됩니다
+        infowindow.open(map, marker);
+</script>
+</div>
+</html>
+
+<!-- hosNo 받고   사용자 이메일, -->  <!--서비스에서 환자이메일 병원no로 hospitalrepository 병원 entity가져옴 예약 Dto에 담음 -->
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<th:block layout:fragment="css">
+    <style>
+    *{margin:0;padding:0;}
+<!--	#doctors{-->
+<!--		border: 1px solid black;-->
+<!--		width: 90%; margin: 0 0 0 10% ;-->
+<!--		height: 700px;-->
+<!--		padding-left:5%;-->
+<!--	}-->
+	.one{
+	    display:inline-block;
+	    margin-right:60px;
+	}
+
+<!--    #doctorImg{-->
+<!--        width:120px;-->
+<!--        height: 160px;-->
+<!--        border:1px solid black;-->
+
+<!--    }-->
+
+    #allLayout{
+        <!--border: 2px solid black;-->
+        width:100%;
+        height:auto;
+    }
+
+    .borderAll{
+        border:1px solid #e8e8e8;
+    }
+
+    #hosAndDay,#doctors{
+        height:50%;
+        display:inline-block;
+                float:left;
+                width: 100%;
+
+    }
+    #dayTime,#hospital{
+        width:50%;
+        height:100%;
+        display:inline-block;
+        float:left;
+        padding: 20px;
+
+    }
+    #doctors{
+        width:100%;
+        margin:0;
+    }
+    #doctor_one{
+        margin:0 auto;
+        padding-left:15px;
+    }
+    #hosImg{
+        <!--border:1px solid blue;-->
+        <!-- 이미지 보더-->
+        width: 100%;
+        width:120px;
+        height:160px;
+    }
+    #hospital_left{
+        width:150px;
+        <!--padding-left:15px;-->
+        <!--border:1px solid blue;-->
+        float:left;
+        margin-right: 20px;
+    }
+    #hospital_left,#hospital_right{
+        display:inline-block;
+    }
+
+    .yoil{
+        width:100px; text-align:center; height:20px;
+    }
+    .button{
+    text-align:right; padding-right:10px;
+    margin:20px 0;
+    }
+    .tdFirst{
+        width:110px;
+    }
+    .day_area{
+        padding-top:30px;
+    }
+
+
+    .yoil_table{
+        height:100%;
+    }
+    .day_btn{
+                margin-top: 89px;
+    }
+    .doctors{
+        padding:20px;
+    }
+    img{
+      vertical-align: baseline !important;
+      border-radius: 10px;
+    }
+    </style>
+</th:block>
+<body>
+
+<div layout:fragment="content">
+    <h2>병원 정보 </h2>
+    <div id="allLayout">
+        <div id="hosAndDay" class="borderAll">
+            <div id="hospital" class="borderAll">
+                <h2 style="text-align:center"> 병원 상세</h2>
+                <div id="hospital_left">
+                    <img th:src="${myHospitalDto.hosImgUrl}" id="hosImg">
+                </div>
+                <table id="hospital_right" th:object="${myHospitalDto}">
+                    <tr>
+                        <td class="tdFirst">병원명</td>
+                        <td th:text="*{hosName}">병원명</td>
+                    </tr>
+                    <tr>
+                        <td class="tdFirst">전화번호</td>
+                        <td th:text="*{hosTel}">전화번호</td>
+                    </tr>
+                    <tr>
+                        <td class="tdFirst">우편번호</td>
+                        <td th:text="*{hosPostNum}">우편번호</td>
+                    </tr>
+                    <tr>
+                        <td class="tdFirst">주소</td>
+                        <td th:text="*{hosAddress}">주소</td>
+                    </tr>
+                    <tr>
+                        <td class="tdFirst">상세주소</td>
+                        <td th:text="*{hosDAddress}">상세주소</td>
+                    </tr>
+                    <tr aria-colspan="2" id="sub">
+                        <td class="tdFirst">진료과목</td>
+                        <td><span style="width:auto" th:each="subject : *{hosSubject}" th:text="${subject}+' '"></span></td>
+                    </tr>
+                </table>
+                <div class="button">
+                    <a  class="btn btn-primary" href="/hospital/my/update/pwConfirm"> 병원 정보 확인하러 가기</a>
+                </div>
+
+                <!--                <a th:href="'/hospital/my/members/' + ${myHospitalDto.hosNo}+'/select'"> 병원 정보 확인하러 가기</a>-->
+                <!--                <button th:formaction="@{'/hospital/my/members/' + ${myHospitalDto.hosNo}+'/update' }" type="submit" class="btn btn-primary">수정</button>-->
+
+            </div>
+            <div id="dayTime" class="day_area">
+                <h2 style="text-align:center;">날짜 정보</h2>
+                <table class="yoil_table">
+                    <tr>
+                        <td class="yoil">월</td>
+                        <td class="yoil">화</td>
+                        <td class="yoil">수</td>
+                        <td class="yoil">목</td>
+                        <td class="yoil">금</td>
+                        <td class="yoil">토</td>
+                        <td class="yoil">일</td>
+                        <td class="yoil">점심시간</td>
+                    </tr>
+                    <tr>
+                        <td th:each="day:${dayTableDtos}" style="text-align:center; ">
+                            <div th:if="${day.workStatus}=='휴무일'">휴무일</div>
+                            <div th:unless="${day.workStatus}=='휴무일'">
+                                <div th:text="${day.startDateTime}"></div>
+                                <div style="text-align:center">~</div>
+                                <div th:text="${day.endDateTime}"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="button day_btn">
+                    <a  class="btn btn-primary" href="/hospital/info/time"> 병원 운영시간 확인하러 가기</a>
+                </div>
+            </div>
+        </div>
+        <div id="doctors" class="doctors borderAll">
+            <h2>의사 명단</h2>
+            <div id="doctor_one">
+
+                <div class="one" th:each="doc: ${doctorDtoList}">
+                    <img th:src="${doc.docImgUrl}" th:alt="${doc.docName}" height="160">
+                    <div th:text="${doc.docName}" style="text-align:center">성함</div>
+                    <!--                <div th:text="${doc.docId}">의사 아이디</div>-->
+                    <!--                <div th:text="${doc.docSubject}">진료과목</div>-->
+                    <!--                <a th:href="'/hospital/doctors/'+${doc.docId}">정보 보기</a>-->
+                </div>
+                <!--            <a th:href="'/hospital/doctors/'+${doc.docId}">의사 명단 확인하러 가기</a>-->
+                <div class="button">
+                    <a  class="btn btn-primary" href="/hospital/doctors/lists"> 의사 명단 확인하러 가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

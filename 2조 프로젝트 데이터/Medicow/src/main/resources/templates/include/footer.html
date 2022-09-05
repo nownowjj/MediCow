@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--<link th:href="@{/css/main.css}" rel="stylesheet">-->
+<th:block layout:fragment="css">
+    .footer{
+    postision:relative;
+    }
+
+</th:block>
+<div class="footer include_footer" th:fragment="abc" >
+    <div class="footer-content">
+        <div class="footer-up">
+            <div class="footer-logo">메디카우</div>
+            <div class="footer-agree">
+                <a href="/user/privacy/privacypolicy">이용약관</a>
+                <a href="/user/privacy/termsofservice">개인정보처리방침</a>
+            </div>
+        </div>
+        <div class="footer-down">
+            <h3>주식회사 메디카우</h3>
+            <ul>
+                <li>서울특별시 금천구 가산동 월드비전</li>
+                <li>대표이사 : 김지원</li>
+                <li>사업자 번호 : 111-81-23576</li>
+                <li>대표전화 : 1588-5213</li>
+                <li>이메일 : sbddr3@gmail.com</li>
+            </ul>
+            <small>Copyright © B-bros Corp. <span>All rights reserved.</span></small>
+        </div>
+    </div>
+</div>
+</html>

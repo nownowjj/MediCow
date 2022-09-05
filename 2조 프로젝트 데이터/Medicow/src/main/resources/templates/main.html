@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>메디카우</title>
+
+    <!-- CSS  -->
+    <link rel="shortcut icon" href="#">
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <!-- aos -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <!-- aos -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script th:src="@{/js/scroll.js}"></script>
+    <script th:src="@{/js/jquery_counterup_min.js}"></script>
+    <script src="https://unpkg.com/scroll-out/dist/scroll-out.min.js"></script>
+    <script src="https://unpkg.com/typeit@8.5.4/dist/index.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.3/waypoints.min.js"></script>
+    <script src="jquery_counterup_min.js"></script> -->
+
+
+    <th:block layout:fragment="script">
+        <script>
+        ScrollOut({
+                onShown: function (el) {
+                    // use the web animation API
+                    el.animate([{ opacity: 0 }, { opacity: 1 }], 1000);
+                },
+                onHidden: function (el) {
+                    // hide the element initially
+                    el.style.opacity = 0;
+                }
+            });
+
+        $(window).on('load',function(){
+
+            jQuery(document).ready(function($) {
+                $('.counter').counterUp({
+                    delay: 100,
+                    time: 1000
+                });
+            });
+        })
+
+        <!-- 클릭 텍스트 이벤트 -->
+        $(document).ready(function(){
+        var search = document.getElementById('search');
+
+
+        $('td').click(function(){
+            var text = $(this).text();
+            console.log(text);
+            $(search).val(jQuery.trim(text));
+        })
+        <!-- 클릭 텍스트 이벤트 -->
+
+        <!-- 거리 설정-->
+        function distCheck(){
+            return false;
+        }
+        <!-- 거리 설정-->
+
+
+
+        <!--비회원 검색기능 막기 -->
+        var userLogin = ($("#userLogin").text());
+        var search_btn = document.getElementById("search_btn");
+
+
+            if(userLogin == "미가입 회원 입니다."){
+                $(search_btn).click(function(){
+                    alert("미가입 회원입니다. 로그인을 해주세요! ");
+
+                    return false;
+                })
+            }else{
+                $(search_btn).click(function(){
+                    var search = $("#search").val();
+                    if(search == ""){
+                        alert("병원명 , 지역 , 진료과목을 입력해 주세요");
+                        return false;
+                    }else{
+                        return true;
+                    }
+                })
+            }
+    })
+
+
+    </script>
+    </th:block>
+
+    <th:block layout:fragment="css">
+        <style>
+
+        </style>
+    </th:block>
+</head>
+
+<body>
+<!-- container  -->
+<div class="container">
+    <!-- container-inner-wrap -->
+    <div class="container-inner-wrap">
+
+        <!-- container-header -->
+        <div  class="container-header">
+            <div class="container-header-inner">
+                <a href="" class="logo">메디카우</a>
+                <div class="btn-group">
+                    <ul>
+                        <li sec:authorize="isAnonymous()"><a href="/hospital/members/front" class="hospital-btn">병원 관리자 로그인</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/user/member/reservation/">예약내역</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/user/members/meUpdate">내 정보 수정</a></li>
+                        <li sec:authorize="isAnonymous()"><a href="/user/members/login">로그인</a></li>
+                        <li sec:authorize="isAuthenticated()"><a href="/user/members/logout">로그아웃</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- container-header end -->
+        XXXX
+        <!-- container-section -->
+        <div class="container-section" >
+
+            <!-- 검색, 아이콘  마크업-->
+            <div class="table-wrap">
+                <div class="text-area">
+                    건강이 편해지는 병원 찾기
+                </div>
+                <div class="text-area2">
+                    <div>등록된 병원 수</div>
+                    <div class="text-right counter" th:text="${hosCnt}"></div>
+                    <div>회원 수</div>
+                    <div class="text-right counter" th:text="${memCnt}"></div>
+                    <!-- <div>등록된 병원 수</div>
+                    <div class="text-right"></div> -->
+                </div>
+
+                <!-- @@  수정 -->
+                <form role="form" th:action="@{/user/hospital/find}" class="search-form" method="get" th:object="${hospitalFindDto}">
+                    <div class="search-form-box">
+                        <!-- 입력값을 파싱시켜 검색 페이지에서 검색기능을 수행 시켜야함 -->
+                        <input type="hidden" th:field="*{region}" placeholder="주소 입력">
+                        <input type="text" th:field="*{hospname}" id="search" placeholder="검색어를 입력하세요" aria-label="search" style="text-align=left;">
+                        <input type="hidden" th:field="*{hospcate}" placeholder="병원과목 선택">
+                        <select class="search-distance" th:field="*{distKm}" th:value="*{distKm}">
+                            <!--<option th:value="1">1Km</option>-->
+                            <option th:value="3">3Km</option>
+                            <option th:value="5">5Km</option>
+                            <option th:value="10">10Km</option>
+                            <option th:value="20" selected="selected">20Km</option>
+                            <option th:value="50"  >50Km</option>
+                        </select>
+                        <!--<img class="balloon" th:src="@{image/Group 25.png}" alt="">-->
+                        <button id="search_btn" type="submit"><img th:src="@{/image/search_icon.svg}" alt="" onclick="distCheck();">
+                        </button>
+                        <label class="search-label">
+                            회원 주소 : <span id="userLogin" th:text="*{user_addr}"></span>
+                            <!--X 좌표 : <span th:text="*{user_x}"></span>-->
+                            <!--Y 좌표 : <span th:text="*{user_y}"></span>-->
+                        </label>
+                        <input type="hidden" th:field="*{user_addr}">
+                        <input type="hidden" th:field="*{user_x}">
+                        <input type="hidden" th:field="*{user_y}">
+                        <!--  -->
+                    </div>
+                </form>
+                <!-- @@  수정 -->
+
+                <table data-aos="fade-zoom-in"
+                       data-aos-easing="ease-in-back"
+                       data-aos-offset="0">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <!---->
+                            <img th:src="@{/image/event.svg}" alt="">
+                            <div>이벤트</div>
+                            <!--</a>-->
+                        </td>
+                        <td>
+                            <img th:src="@{/image/Corona.svg}" alt="">
+                            <div>코로나19 예방접종</div>
+
+                        </td>
+                        <td>
+                            <img th:src="@{/image/dent.svg}" alt="">
+                            <div>치과</div>
+
+                        </td>
+                        <td><img th:src="@{/image/derm.svg}" alt="">
+                            <div>피부과</div>
+                        </td>
+                        <td><img th:src="@{/image/plas.svg}" alt="">
+                            <div>성형외과</div>
+                        </td>
+                        <td><img th:src="@{/image/eyes.svg}" alt="">
+                            <div>안과</div>
+                        </td>
+                        <td><img th:src="@{/image/women.svg}" alt="">
+                            <div>산부인과</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img th:src="@{/image/mental_new.svg}" alt="">
+                            <div>정신건강의학과</div>
+                        </td>
+                        <td><img th:src="@{/image/pee.svg}" alt="">
+                            <div>비뇨기과</div>
+                        </td>
+                        <td><img th:src="@{/image/sprint.svg}" alt="">
+                            <div>정형외과</div>
+                        </td>
+                        <td><img th:src="@{/image/stun (1).svg}" alt="">
+                            <div>마취통증의학과</div>
+                        </td>
+                        <td><img th:src="@{/image/nsurgery.svg}" alt="">
+                            <div>신경외과</div>
+                        </td>
+                        <td><img th:src="@{/image/rehab.svg}" alt="">
+                            <div>재활의확과</div>
+                        </td>
+                        <td><img th:src="@{/image/video.svg}" alt="">
+                            <div>영상의학과</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img th:src="@{/image/surgery.svg}" alt="">
+                            <div>외과</div>
+                        </td>
+                        <td><img th:src="@{/image/neuron.svg}" alt="">
+                            <div>신경과</div>
+                        </td>
+                        <td><img th:src="@{/image/child.svg}" alt="">
+                            <div>소아과</div>
+                        </td>
+                        <td><img th:src="@{/image/inner.svg}" alt="">
+                            <div>내과</div>
+                        </td>
+                        <td><img th:src="@{/image/ears.svg}" alt="">
+                            <div>이비인후과</div>
+                        </td>
+                        <td><img th:src="@{/image/home.svg}" alt="">
+                            <div>가정의학과</div>
+                        </td>
+                        <td><img th:src="@{/image/han.svg}" alt="">
+                            <div>한의원</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 검색, 아이콘 마크업 end -->
+
+        </div>
+        <!-- container-section end -->
+
+    </div>
+    <!-- container-inner-wrap end -->
+    <!-- 화살표 스크롤임~-->
+    <div class="down_scroll">
+        <img th:src="@{/image/main_scroll_udo_img.svg}"  alt="">
+        <p>Scorll</p>
+    </div>
+    <!-- 화살표 스크롤 끝임~-->
+</div>
+<!-- container end -->
+<!-- ---------------- -->
+
+
+<!-- ---------------- -->
+<!-- container2  -->  <!-- 공지사항 게시판 , -->
+<div class="container2 container">
+    <img class="container2_image" th:src="@{/image/main_image_001.jpg}" data-aos="fade-left" data-aos-offset="120" data-aos-easing="ease-in-sine">
+    <!--<img class="container2_image" th:src="@{/image/Group_18.png}" data-aos="fade-left" data-aos-offset="120" data-aos-easing="ease-in-sine">-->
+    <div class="container2_up">
+        <div class="up_text_box">
+            <div class="text_line"></div>
+            <p>메디카우 <br>공지사항 · 건강정보</p>
+        </div>
+    </div>
+    <div class="container2_down">
+        <ul class="a_box">
+            <li class="card" data-aos="fade-up" data-aos-offset="300" data-aos-easing="ease-in-sine"><a href="/user/boards/">공지사항<img th:src="@{/image/4812820.png}"></a></li>
+            <li class="card" data-aos="fade-up" data-aos-offset="300" data-aos-easing="ease-in-sine"><a href="/user/health/">건강정보<img class="heart" th:src="@{/image/heart.png}"></a></li>
+            <li class="card" data-aos="fade-up" data-aos-offset="300" data-aos-easing="ease-in-sine"><img class="card_logo" th:src="@{/image/medicow_logo.png}"><h6 style="font-size:18px;font-weight:bold;">피드 관리</h6><p class="card_logo_p">공지사항 , 건강정보,<br>모두 확인해 보세요~</p></li>
+        </ul>
+    </div>
+
+    <!--    <div class="test-box" data-aos="fade-up" data-aos-offset="300" data-aos-easing="ease-in-sine">-->
+    <!--        <a href="/boards/">공지사항</a>-->
+    <!--    </div>-->
+
+    <!--        <form role="form" method="get" th:object="${noticeBoards}">-->
+    <!--            <table border="1">-->
+    <!--                <thead>-->
+    <!--                <tr>-->
+    <!--                    <th colspan="4" align="center"><a href="/boards/">공지사항</a></th>-->
+    <!--                </tr>-->
+    <!--                <tr>-->
+    <!--                    <th>번호</th>-->
+    <!--                    <th>제목</th>-->
+    <!--                    <th>작성자</th>-->
+    <!--                    <th>작성일자</th>-->
+    <!--                    <th>View</th>-->
+    <!--                </tr>-->
+    <!--                </thead>-->
+    <!--                <tfoot>-->
+    <!--                <tr th:each="noticeBoard, status: ${noticeBoards.getContent()}">-->
+    <!--                    <td th:text="${noticeBoard.id}"></td>-->
+    <!--                    <td>-->
+    <!--                        <a th:href="'/boards/noticeId/'+${noticeBoard.id}" th:text="${noticeBoard.subject}"></a>-->
+    <!--                    </td>-->
+    <!--                    <td th:text="${noticeBoard.member.name}"></td>-->
+    <!--                    <td th:text="${noticeBoard.regTime}"></td>-->
+    <!--                    <td th:text="${noticeBoard.views}"></td>-->
+    <!--                </tr>-->
+    <!--                </tfoot>-->
+    <!--            </table>-->
+    <!--        </form>-->
+
+
+
+</div>
+<!-- container2 end-->
+<!-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> -->
+
+
+
+<!-- container3  -->
+<div class="container3 container" >
+    <!--<div class="circle"></div>
+    <div class="circle circle2"></div>-->
+    <div class="video-card">
+        <div class="video-card-wrap hidehand">
+            <!--<p>건강을 위하여</p>-->
+            <img class="video_hand" th:src="@{/image/hand.png}">
+            <video class="clip" th:src="@{/image/Bloodcheck.mp4}" type="video/mp4" loop muted ></video>
+        </div>
+    </div>
+
+    <div class="video-card">
+        <div class="video-card-wrap">
+            <p class="video-text">메디카우는 여러분들에게 행복을 줍니다</p>
+            <p class="video-text-sm">
+                메디카우의 편리함은 여러분에게 건강을 줍니다.<Br> 바쁜 일상속 , 보다 쉽게 건강에 필요한 유익한 정보와
+                탁월하고 편리한 병원을 선택하여 여러분들의 일상에 행복을 주세요.<br>
+            </p>
+            <p class="video-text-sm">
+                The convenience of Medicow gives you health.<Br> in one's busy daily life , It's easier to find useful information about your health
+                Choose an excellent and convenient hospital to give happiness to your daily life.<br>
+            </p>
+            <p class="video-text-sm">
+                La commodité de Medicow vous donne la santé.<Br> dans sa vie quotidienne bien remplie , Il est plus facile de trouver des informations utiles sur votre santé.
+                Choisissez un hôpital excellent et pratique pour donner du bonheur à votre vie quotidienne.<br>
+            </p>
+
+            <!--<video class="clip" th:src="@{/image/Heart Beats - 4360.mp4}" type="video/mp4" loop muted ></video>-->
+        </div>
+    </div>
+    <script>
+                const clip = document.querySelectorAll('.clip');
+                const card_wrap = document.querySelectorAll('.video-card');
+                for(let i = 0 ; i < clip.length ; i++){
+                    clip[i].addEventListener('mouseenter',
+                    function(e){
+                        clip[i].play()
+                        $(card_wrap[i]).css("background","#ffffff");
+
+                    })
+                    clip[i].addEventListener('mouseleave',
+                    function(e){
+                        clip[i].pause()
+                        $(card_wrap[i]).css("background","none");
+                    })
+                }
+
+        $(document).ready(function(){
+            $(".hidehand").mouseenter(function(){
+            console.log("dd");
+                $(".video_hand").css("display","none");
+            })
+            $(".hidehand").mouseleave(function(){
+                $(".video_hand").css("display","block");
+            })
+        })
+
+        </script>
+
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-up">
+                <div class="footer-logo">메디카우</div>
+                <div class="footer-agree" >
+                    <a href="/user/privacy/privacypolicy">이용약관</a>
+                    <a href="/user/privacy/termsofservice">개인정보처리방침</a>
+                </div>
+            </div>
+            <div class="footer-down">
+                <h3>주식회사 메디카우</h3>
+                <ul>
+                    <li>서울특별시 금천구 가산동 월드비전</li>
+                    <li>대표이사 : 김지원</li>
+                    <li>사업자 번호 : 111-222-2357</li>
+                    <li>대표전화 : 1588-5213</li>
+                    <li>이메일 : sbddr3@gmail.com</li>
+                </ul>
+                <small>Copyright © B-bros Corp. <span>All rights reserved.</span></small>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- container3 end-->
+<!-- --------------------- -->
+
+
+
+
+<!-- --------------------- -->
+<!-- footer -->
+
+
+
+
+
+
+
+
+<th:block layout:fragment="script">
+    <script>
+
+    /* header 메뉴 마우스 스크롤시 이벤트 추가함 */
+    $(window).scroll(function(){
+            var scroll = $(window).scrollTop();
+            if (scroll > 1) {
+            $(".container-header").css("background" , "rgb(255, 237, 73)");
+            }
+            else{
+            $(".container-header").css("background" , "rgb(255, 237, 73)");
+            }
+        })
+    /* ------------------------------------------ */
+    /* ------------------------------------------ */
+    // var swiper = new Swiper(".mySwiper", {
+    //     slidesPerView: 1,
+    //     // spaceBetween: 30,
+    //     autoplay: {
+    //       delay: 3000
+    //     },
+
+    //     loop: true,
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //       clickable: true
+    //     },
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev"
+    //     }
+    //   });
+    /* ------------------------------------------ */
+    /* ------------------------------------------ */
+    document.addEventListener('DOMContentLoaded',()=>{
+        new TypeIt('.text-area')
+            .pause(1000)
+            .delete(5,{delay:1000})
+            .type('메디카우')
+            .go();
+    });
+
+
+    </script>
+</th:block>
+</body>
+
+</html>

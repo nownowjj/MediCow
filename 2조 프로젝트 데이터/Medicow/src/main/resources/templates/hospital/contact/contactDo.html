@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <title>Title</title>
+</head>
+<th:block layout:fragment="script">
+    <script>
+         $(document).ready(function(){
+        $("#searchBtn").on("click",function(e) {
+            e.preventDefault();
+            page(0);
+        });
+<!--        if([[${deleteMessage}]]){-->
+<!--        var deleteMessage = [[${deleteMessage}]];-->
+<!--            if(deleteMessage != null){-->
+<!--                alert(deleteMessage);-->
+<!--            }-->
+<!--                    }-->
+
+    });
+     function page(page){
+        var searchBy = $("#searchBy").val();
+        var searchQuery = $("#searchQuery").val();
+        console.log(searchBy);
+        console.log(searchQuery);
+
+        location.href="/hospital/contact/" + page + "?searchBy=" + searchBy
+        + "&searchQuery=" + searchQuery;
+    }
+
+
+    </script>
+</th:block>
+<th:block layout:fragment="css">
+    <style>
+
+        .buttonRight{
+            display:block;
+            float:right;
+            padding-right:20px;
+        }
+        .pagination{
+        display: flex;
+    width: 100%;
+    margin-top: 100px;
+    list-style: none;
+    border-radius: 0.25rem;
+
+        }
+
+    </style>
+</th:block>
+
+
+<body>
+<div layout:fragment="content">
+    <h2>문의사항</h2>
+
+    <form th:action="@{'/hospital/contact'}" role="form" method="get" th:object="${datas}">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>게시판 번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>작성일자</th>
+                <th>답변 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data, status : ${datas.getContent()}">
+                <td th:text="${data.id}"></td>
+                <td th:text="${data.hospital.hosId}"></td>
+                <td>
+                    <a th:href="'/hospital/my/contact/'+${data.id}" th:text="${data.subject}"></a>
+                </td>
+                <td th:text="${#temporals.format(data.regTime, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${data.contactStatus}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div>
+            <a href="/hospital/my/contact/new" class="btn btn-primary buttonRight"> 문의사항 등록하기</a>
+        </div>
+        <div class="search_pre_next" th:with="start=${(datas.number/maxPage)*maxPage + 1}, end=(${(datas.totalPages == 0) ? 1 : (start + (maxPage - 1) < datas.totalPages ? start + (maxPage - 1) : datas.totalPages)})">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item" th:classappend="${datas.first}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${datas.number - 1} + ')'" aria-label='Previous'
+                       class="page-link">
+                        <span aria-hidden='true'>Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                    th:classappend="${datas.number eq page-1}?'active':''">
+                    <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text"
+                       class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:classappend="${datas.last}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${datas.number + 1} + ')'" aria-label='Next'
+                       class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+
+        <div class="form-inline justify-content-center " th:object="${contactSearchDto}">
+            <div class="row">
+                <select th:field="*{searchBy}" class="form-select" style="width:auto;">
+                    <option value="">전체</option>
+                    <option value="subject">제목</option>
+                    <option value="content">글내용</option>
+                    <option value="contactStatus">답변 여부</option>
+                </select>
+                <div>
+                    <input th:field="*{searchQuery}" type="text" class="form-control"
+                           placeholder="검색어를 입력해주세요">
+                </div>
+                <div>
+                    <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

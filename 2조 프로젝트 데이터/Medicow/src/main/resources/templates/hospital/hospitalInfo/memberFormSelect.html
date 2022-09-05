@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- 사용자 CSS 추가 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<th:block layout:fragment="css">
+    <style>
+
+    .hospital{
+        width:85%;
+        border:1px solid blue;
+        height:100%; float:right;
+    }
+    #hospitalLeft{
+        margin-top:30px;
+        width:25%; margin-left:40px;
+        display:inline-block;
+        float:left;
+    }
+    #hospitalRight{
+        width:70%; margin-left:20px; margin-top:20px;
+        display:inline-block;
+        float:left;
+    }
+    .hosBlock1,.hosBlock2{ width:100%; height:50px; margin-top:20px;}
+    #hosImg{
+        height:240px; border:1px solid blue;
+    }
+    .hos_title{
+        width:20%; padding-left:20px;
+        height:30px; font-size:16px; font-weight:500; font-color:#333333;
+    }
+     .hos_title1{
+        width:40%;
+        height:30px; font-size:16px; font-weight:500; font-color:#333333;
+    }
+    .hos_title, .hos_title{ padding-top:5px;}
+    .hosLeftValue { width:60%; font-color:#eeeeee; height:40px; padding-bottom:2px; padding-left:5px; border-bottom:1px solid #eeeeee; font-weight:500;}
+    .hosRightValue { margin-left:20px; width:70%; height:40px; padding-bottom:2px;  padding-left:5px; border-bottom:1px solid #eeeeee; font-weight:500; font-color:#eeeeee;}
+    .hos_title, .hosLeftValue, .hosRightValue,.hos_title1{ display:inline-block; float:left; }
+
+    table{text-align:center; }
+    .trHeight{height:60px;}
+    #updateButton{float:right; margin-right:20px; margin-bottom:10px; }
+
+    .modal{
+        position:absolute;
+        width:70%; height:50%; background: rgba(0,0,0,0.3);
+        top:25%; left:15%;
+        display:none;
+    }
+
+    </style>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+             $("input[name=hosSubject]").each(function(i){
+
+                var hospital  =[[${hospitalFormDto.hosSubject}]];
+                for(var i=0; i<hospital.length; i++){
+                    if(hospital[i]==$(this).val()){
+                        $(this).prop('checked',true);
+                    }
+                }
+            });
+    });
+
+$(function(){
+
+  $("#allImg").click(function(){
+    $(".modal").fadeIn();
+  });
+
+  $(".modal_content").click(function(){
+    $(".modal").fadeOut();
+  });
+
+});
+
+
+
+    </script>
+</th:block>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="hospital" th:object="${hospitalFormDto}">
+        <div id="hospitalLeft">
+            <div style="margin-bottom:60px;">
+                <img th:src="*{yImgUrl}" id="hosImg">
+            </div>
+            <button type="button" id="allImg">이미지 전체 보기</button>
+            <div class="modal">
+                <div class="modal_content" title="클릭시 창 닫힘">
+                    <div id="hosImgAll" th:if="${not #lists.isEmpty(hospitalFormDto.hospitalImgDtoList)}">
+                        <div class="form-group"
+                             th:each="hospitalImgDto, status:${hospitalFormDto.hospitalImgDtoList}">
+                            <img style="width:10%; display:inline-block; float:left;" th:src="${hospitalImgDto.imgUrl}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hosBlock1">
+                <div class="hos_title1">병원 이름</div>
+                <div class="hosLeftValue" id="hosName" th:text="*{hosName}"></div>
+            </div>
+            <div class="hosBlock1">
+                <div class="hos_title1">대표자 이름</div>
+                <div class="hosLeftValue" th:text="*{hosCeo}" id="hosCeo"></div>
+            </div>
+            <div class="hosBlock1">
+                <div class="hos_title1">대표자 이메일</div>
+                <div class="hosLeftValue" th:text="*{hosCeoEmail}" id="hosCeoEmail"></div>
+            </div>
+            <div class="hosBlock1">
+                <div class="hos_title1">전화번호</div>
+                <div class="hosLeftValue" th:if="*{hosTel}" th:text="*{hosTel}"></div>
+                <div class="hosLeftValue" th:unless="*{hosTel}" th:text="*{hosTel}" ></div>
+            </div>
+        </div>
+        <div id="hospitalRight">
+            <div class="hosBlock2">
+                <div class="hos_title">병원 ID</div>
+                <div class="hosRightValue" th:text="*{hosId}" id="hosId"></div>
+            </div>
+            <div style="height:200px;">
+                <div class="hos_title">진료과목</div>
+                <div style="width:70%; display:inline-block; float:left; margin-left:20px;">
+                    <table style="width:100%;">
+                        <tr class="trHeight">
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="치과" disabled>치과
+                                </div>
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="피부과" disabled>피부과
+                                </div>
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="성형외과" disabled>성형외과
+                                </div>
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="안과" disabled>안과
+                                </div>
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="산부인과" disabled>산부인과
+                                </div>
+                            </td>
+                            <td>
+                                <input class="hosCheck" type="checkbox" name="hosSubject" value="정신건강의학과" disabled>정신건강의학과
+                            </td>
+                        </tr>
+                        <tr class="trHeight">
+                            <td>
+                                <input class="hosCheck" type="checkbox" name="hosSubject" value="정형외과"
+                                       disabled>정형외과
+                            </td>
+                            <td>
+                                <input class="hosCheck" type="checkbox" name="hosSubject" value="마취통증의학과"
+                                       disabled>마취통증의학과
+                            </td>
+                            <td>
+                                <input class="hosCheck" type="checkbox" name="hosSubject" value="신경외과"
+                                       disabled>신경외과
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="재활의학과"
+                                            disabled>재활의학과
+                                </div>
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="영상의학과"
+                                            disabled>영상의학과
+                                </div>
+                            </td>
+                            <td>
+                                <div><input class="hosCheck" type="checkbox" name="hosSubject" value="외과"
+                                            disabled>외과
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="trHeight">
+                            <td>
+                                <div><input type="checkbox" name="hosSubject" value="신경과" disabled>신경과</div>
+                            </td>
+                            <td>
+                                <div><input type="checkbox" name="hosSubject" value="소아과" disabled>소아과</div>
+                            </td>
+                            <td>
+                                <div><input type="checkbox" name="hosSubject" value="내과" disabled>내과</div>
+                            </td>
+                            <td>
+                                <div><input type="checkbox" name="hosSubject" value="이비인후과" disabled>이비인후과</div>
+                            </td>
+                            <td>
+                                <div><input type="checkbox" name="hosSubject" value="가정의학과" disabled>가정의학과</div>
+                            </td>
+                            <td>
+                                <div><input type="checkbox" name="hosSubject" value="한의원" disabled>한의원</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="hosBlock2">
+                <div class="hos_title">병원 우편번호</div>
+                <div class="hosRightValue" th:text="*{hosPostNum}" id="hosPostNum"></div>
+            </div>
+            <div class="hosBlock2">
+                <div class="hos_title">병원 주소</div>
+                <div class="hosRightValue" th:text="*{hosAddress}" id="hosAddress"></div>
+            </div>
+            <div class="hosBlock2">
+                <div class="hos_title">병원 상세주소</div>
+                <div class="hosRightValue" th:text="*{hosDAddress}" id="hosDAddress">상세주소 기입 안함</div>
+            </div>
+            <div class="hosBlock2">
+                <div class="hos_title">병원 오시는 길</div>
+                <div class="hosRightValue" th:if="${hosPath}" th:text="${hosPath}"></div>
+                <div class="hosRightValue" th:unless="${hosPath}">오시는길 기입 안함</div>
+            </div>
+        </div>
+        <a th:href="'/hospital/my/members/'+${hosNo}+'/update'">
+            <button id="updateButton">수정하러 가기_근데 아마 프론트 페이지로 이동할 것임</button>
+        </a>
+
+    </div>
+</div>
+
+<!--                <input type="hidden" th:field="*{hosRegister}" value="YES">-->
+<div type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"></div>
+
+</body>
+
+</html>

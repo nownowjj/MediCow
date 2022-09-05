@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<div layout:fragment="content">
+
+    <h1>시간 수정하는 페이지</h1>
+    <form th:action="@{'/hospital/info/time/update'}" role="form" method="post" th:object="${dayTableDtos}">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>요일</th>
+                <th>시작시간</th>
+                <th>~</th>
+                <th>마감시간</th>
+                <th>휴일여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dayTableDto, status:${dayTableDtos}">
+                <td>
+                    <input type="text" readonly="readonly" th:value="${dayTableDto.dayStatus}">
+                    <input type="hidden" name="dayStatus" th:value="${dayTableDto.dayStatus}">
+                </td>
+                <td>
+                    <input type="hidden" name="id" th:value="${dayTableDto.id}">
+                    <input type="time" name="startDateTime" th:value="${dayTableDto.startDateTime}">
+
+                </td>
+                <td>~</td>
+                <td>
+                    <input type="time" name="endDateTime" th:value="${dayTableDto.endDateTime}">
+                </td>
+                <td>
+                    <select name="workStatus" id="workStatus">
+                        <option th:selected="${dayTableDto.workStatus=='진료일'}">진료일</option>
+<!--                        <option th:value="휴무일">휴무일</option>-->
+                        <option th:selected="${dayTableDto.workStatus=='휴무일'}">휴무일</option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary btn-lg btn-block" type="submit">입력하기</button>
+
+    </form>
+</div>
+
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            console.log(errorMessage)
+
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
+    </script>
+
+</th:block>

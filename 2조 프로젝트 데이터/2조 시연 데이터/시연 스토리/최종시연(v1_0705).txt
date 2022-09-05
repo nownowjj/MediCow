@@ -1,0 +1,67 @@
+-- 회원
+1. 회원 메인페이지(/user/)
+2. 회원 로그인/회원가입 페이지(/members/login)
+3. 회원 회원가입 페이지(/members/join)
+4. 회원 공지사항 페이지(/user/boards/)
+5. 회원 건강정보 페이지(/user/health/)
+6. 회원 검색 페이지 (등록된 병원만 예약이 가능하므로)
+
+-- 병원
+7. 병원 프론트 페이지(/hospital/members/front)
+8. 병원 회원가입 페이지(/hospital/members/new)
+9. 병원 로그인 페이지(/hospital/members/login)
+10. 병원 메인 페이지(/hospital/main)
+11. 병원 의사명단조회 페이지(/hospital/doctors/lists)
+12. 병원 의사명단추가 페이지(/hospital/doctors/new)
+13. 병원 의사상세보기 페이지(/hospital/doctors/{})
+14. 병원 운영시간 페이지(/hospital/info/time)
+15. 병원 운영시간 등록페이지(/hospital/info/time/insert)
+16. 병원 예약확인 페이지(/hospital/reservation) 예약 내역이 없음을 확인 후
+
+-- 회원
+17. 회원 메인페이지(/user/)
+18. 회원 로그인/회원가입 페이지(/members/login)
+19. 회원 검색 페이지
+20. 회원 예약 페이지(/hospital/detail/{})
+21. 회원 예약내역 페이지(/user/member/reservation/)
+22. 회원 정보수정 페이지(/user/members/meUpdate)
+
+-- 병원
+23. 병원 프론트 페이지(/hospital/members/front)
+24. 병원 로그인 페이지(/hospital/members/login)
+25. 병원 예약내역 페이지(/hospital/reservation)
+
+-- 회원
+26. 회원 메인페이지(/user/)
+27. 회원 로그인/회원가입 페이지(/members/login)
+28. 회원 예약내역 페이지(/user/member/reservation/)
+29. 회원 리뷰 페이지(/user/member/review/{})
+
+-- 병원
+30. 병원 프론트 페이지(/hospital/members/front)
+31. 병원 로그인 페이지(/hospital/members/login)
+32. 병원 리뷰 페이지(/hospital/review) (ajax f5해주기) 
+33. 병원 문의사항 페이지(/hospital/contact)
+34. 병원 문의사항 등록페이지(/hospital/my/contact/new) 
+35. 병원 문의사항 디테일 페이지(/hospital/my/contact/{})
+36. 병원 공지사항 페이지(/hospital/notice)
+37. 병원 공지사항 디테일 페이지(/hospital/noticeDtl/{})
+
+-- 관리자
+38. 관리자 로그인 페이지(/admin/login)
+39. 관리자 메인 페이지(/admin/main)
+40. 관리자 회원 페이지(/admin/member)
+41. 관리자 병원 페이지(/admin/hospital)
+42. 관리자 리뷰 삭제 요청 페이지(/admin/review) (ajax f5해주기)
+43. 관리자 문의사항 페이지(/admin/contactad)
+44. 관리자 문의사항 디테일 페이지(/admin/contactDtl/{})
+45. 관리자 공지사항 페이지(/admin/notice)
+46. 관리자 공지사항 등록페이지(/admin/notice/new)
+47. 관리자 공지사항 수정삭제페이지(/admin/noticeDtl/{})
+
+-- 병원
+48. 병원 프론트 페이지(/hospital/members/front)
+49. 병원 로그인 페이지(/hospital/members/login)
+50. 병원 문의사항 페이지(/hospital/contact)
+51. 병원 문의사항 확인 페이지(/hospital/my/contact/{})
+52. 병원 공지사항 페이지(/hospital/notice)

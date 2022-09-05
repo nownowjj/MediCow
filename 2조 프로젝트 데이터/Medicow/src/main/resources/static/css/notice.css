@@ -1,0 +1,169 @@
+.down_scroll p {
+    color: white;
+}
+.notice_container1{
+    width:100%;
+    height:100vh;
+    background: url(/image/noticemain.png) 100% 100% no-repeat;
+    background-size: cover;
+    position:fixed;
+    top:0;
+    left:0;
+}
+.notice_container1_text{
+    position: absolute;
+    top: 40%;
+    left: 237px;
+    color: white;
+    font-size: 37px;
+}
+/* notice container1 css end*/
+
+
+/* notice container2 start end*/
+.notice_container2{
+    width:100%;
+    height:100vh;
+    position:relative;
+    z-index:99;
+    margin-top: 100vh;
+    background: white;
+    padding-top: 1px;
+}
+.notice_container2 h1{
+    font-size: 35px;
+    width: 1250px;
+    margin: 100px auto 80px;
+}
+.notice_container2 .notice_form_box{
+   /* border-top:1px solid black;
+    border-bottom:1px solid black;*/
+    width:1250px;
+    height:auto;
+    margin:0px auto;
+}
+.notice_table{
+    width: 100%;
+    border-collapse:collapse;
+    color:#2c3744;
+}
+.notice_table a{
+    text-decoration: underline;
+}7
+.notice_table thead{
+    margin-top:60px;
+    border-top:1px solid #686565;
+}
+.notice_table thead tr th{
+    height:40px;
+    padding:10px 7px;
+}
+.notice_table tbody{
+    text-align:center;
+}
+.notice_table tbody tr{
+    height:45px;
+    padding:10px 7px;
+    border-top:1px solid rgba(44,55,68,0.15);
+}
+.notice_table tbody tr:last-child{
+    border-bottom:1px solid rgba(44,55,68,0.15);
+}
+.pagination{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 18px;
+    margin-top: 20px;
+}
+.pagination li{
+    margin:0px 20px ;
+}
+.form-inline{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 60px;
+    margin: 20px 0px;
+}
+.form-inline input{
+   width: 240px;
+   height: 40px;
+   font-size: 18px;
+   border: 2px solid #e8e8e8;
+   padding: 10px;
+}
+.form-inline button{
+    height: 40px;
+    width: 40px;
+    border: 2px solid #e8e8e8;
+    font-weight: bold;
+    font-size: 16px;
+}
+/* 공지사항 메인 css 끝*/
+
+/* 공지사항 상세 페이지 시작 */
+.notice_detail{
+    padding-top:60px;
+    width:100%;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.notice_detail_box{
+    width:1250px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    margin-bottom:300px;
+    box-shadow: rgb(0 0 0 / 8%) 0px 16px 32px 0px;
+    padding: 30px;
+    border-radius: 30px;
+    position: relative;
+}
+.detail_header{
+    width:100%;
+}
+.detail_header input{
+    width:auto !important;
+}
+.notice_detail_box input{
+    width: 100%;
+    border: none;
+    height: 50px;
+    font-size: 20px;
+    background: none;
+}
+.notice_contents{
+    height: auto;
+        margin: 30px 0px 10px 0px;
+        font-size: 20px;
+        letter-spacing: 1px;
+        /* border-top: 1px solid #6c6a6a; */
+        padding-top: 30px;
+        width: 100%;
+        padding: 30px;
+        border: 1px solid #cfc7c7;
+        border-radius: 20px;
+}
+.notice_detail_box h1{
+    width:100%;
+    margin-bottom: 30px;
+}
+.updateTime::after{
+    content:"수정일자";
+     background-color: #FFBA10;
+     border-color: black;
+     border-style: dotted;
+}
+.back{
+      position: absolute;
+     top: 0px;
+     height: 30px;
+     border: none;
+     right: 0px;
+     border-radius: 10px;
+     background-color: #e8e8e8;
+}

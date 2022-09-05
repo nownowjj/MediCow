@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>
+    <link th:href="@{/css/hospFind.css}" rel="stylesheet" />
+</head>
+<th:block layout:fragment="script">
+    <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c6f9b7d5fd0fdb194944541b75e0e42e&libraries=services,clusterer,drawing"></script>
+    <script th:inline="javascript">
+        let sortCnt = 0;
+        let map;
+        let totalList = [[${hospitalList}]];
+        let user_addr = [[${hospitalFindDto}]].user_addr;
+        let user_hosPosX = [[${hospitalFindDto}]].user_y;
+        let user_hosPosY = [[${hospitalFindDto}]].user_x;
+        console.log(user_hosPosX);
+        let distKm = [[${hospitalFindDto}]].distKm;
+        let addressArray = [{title:'회원주소', addr:user_addr}];
+        let distArray = [];
+
+        for(let i = 0; i < totalList.content.length; i++){
+                let title = totalList.content[i].hosName;
+                let addr = totalList.content[i].hosAddress;
+                let hosNo = totalList.content[i].hosNo;
+                let hosId = totalList.content[i].hosId;
+                let hosTel = totalList.content[i].hosTel;
+                let hosPosX = totalList.content[i].hosPosY;
+                let hosPosY = totalList.content[i].hosPosX;
+                let distOne = getDistanceFromLatLonInKm(user_hosPosX, user_hosPosY, hosPosX, hosPosY).toFixed(2);
+
+                if(distKm > distOne){
+                    addressArray.push({title, addr, hosNo, hosId, hosTel, hosPosX, hosPosY, distOne});
+                }
+        }
+        console.log(totalList);
+        console.log(addressArray);
+
+        $(document).ready(function(){
+            tableCreate(addressArray);
+
+            mapDraw(addressArray, user_hosPosX, user_hosPosY);
+        });
+
+        function tableCreate(addressArray){
+            for(let i = 1; i < addressArray.length; i++){
+                let table = "<tr>";
+                table += "<td>" + addressArray[i].title + "</td>";
+                table += "<td>" + addressArray[i].hosTel + "</td>";
+                table += "<td>" + addressArray[i].addr + "</td>";
+                table += "<td>" + addressArray[i].distOne + "Km</td>";
+                if(addressArray[i].hosId == null){
+                    table += "<td><label>미가입 병원</label></td>";
+                }else{
+                    table += "<td><input type='hidden' value=" + addressArray[i].hosId + "><a href='/hospital/detail/" + addressArray[i].hosNo +"'>예약하기</a></td>";
+                }
+                table += "</tr>";
+                $('tbody').append(table);
+            }
+        }
+
+        function mapDraw(addressArray, user_hosPosX, user_hosPosY){
+            let mapContainer = document.getElementById('map');
+            let mapOption = {
+                    center : new kakao.maps.LatLng(user_hosPosX, user_hosPosY),
+                    level : 6
+            };
+            map = new kakao.maps.Map(mapContainer, mapOption);
+            let positions = new kakao.maps.LatLng(user_hosPosX, user_hosPosY);
+            let marker = new kakao.maps.Marker({
+                map : map,
+                position : positions
+            })
+            marker.setMap(map);
+
+            for (let i = 0; i < addressArray.length; i++){
+                let lat2 = addressArray[i].hosPosX;
+                let lng2 = addressArray[i].hosPosY;
+                positions = new kakao.maps.LatLng(lat2, lng2);
+                marker = new kakao.maps.Marker({
+                    map : map,
+                    position : positions
+                });
+                marker.setMap(map);
+            }
+        }
+
+        function distSort(){
+            let distArraySort = []
+            if(sortCnt == 0){
+                distArraySort = addressArray.sort(function (a, b){
+                    return a.distOne - b.distOne;
+                });
+                sortCnt += 1;
+            }else{
+                distArraySort = addressArray.sort(function (a, b){
+                    return b.distOne - a.distOne;
+                });
+                sortCnt -= 1;
+            }
+            $('tbody tr').remove();
+            for(let i=0; i < distArraySort.length; i++){
+                if(distArraySort[i].title == "회원주소"){continue;}
+                let table = "<tr>";
+                table += "<td>" + distArraySort[i].title + "</td>";
+                table += "<td>" + distArraySort[i].hosTel + "</td>";
+                table += "<td>" + distArraySort[i].addr + "</td>";
+                table += "<td>" + distArraySort[i].distOne + "km</td>";
+                <!--table += "<td><a href='/hospital/detail/" + distArraySort[i].hosNo +"'>예약하기</a></td>";-->
+                if(addressArray[i].hosId == null){
+                    table += "<td><label>미가입 병원</label></td>";
+                }else{
+                    table += "<td><input type='hidden' value=" + addressArray[i].hosId + "><a href='/hospital/detail/" + addressArray[i].hosNo +"'>예약하기</a></td>";
+                }
+                table += "</tr>";
+                $('tbody').append(table);
+            }
+        }
+
+        function getDistanceFromLatLonInKm(lat1,lng1,lat2,lng2) {
+            function deg2rad(deg) {
+                return deg * (Math.PI/180)
+            }
+            var R = 6371; // Radius of the earth in km
+            var dLat = deg2rad(lat2-lat1);  // deg2rad below
+            var dLon = deg2rad(lng2-lng1);
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            var d = R * c; // Distance in km
+            return d;
+        }
+
+
+
+    </script>
+</th:block>
+
+<div layout:fragment="content" class="hospFindContainer">
+
+    <div class="search_input_list">
+        <!--검색 창-->
+        <form role="form" class="form_fixed" method="get" th:action="@{/hospital/find}" th:object="${hospitalFindDto}">
+            <div class="search-form-box">
+                <input type="hidden" th:field="*{region}" placeholder="주소 입력">
+                <input type="text" th:field="*{hospname}" placeholder="병원이름 입력" class="searchQuery_input">
+                <input type="hidden" th:field="*{hospcate}" placeholder="병원과목 선택">
+                <select th:field="*{distKm}" th:value="*{distKm}" class="search_select">
+                    <option th:value="1">1Km</option>
+                    <option th:value="3">3Km</option>
+                    <option th:value="5">5Km</option>
+                    <option th:value="10">10Km</option>
+                    <option th:value="20">20Km</option>
+                    <option th:value="50">50Km</option>
+                </select>
+                <input type="submit" value="검색"  class="search_submit"><br>
+                <div class="search_add">회원 주소 : <span th:text="*{user_addr}"></span></div>
+                <input type="hidden" th:field="*{user_x}">
+                <input type="hidden" th:field="*{user_y}">
+                <input type="hidden" th:field="*{user_addr}">
+            </div>
+        </form>
+        <!--검색 창-->
+
+        <!--출력 요소-->
+        <form role="form" th:object="${hospitalList}">
+            <table class="list-table">
+                <thead>
+                <tr>
+                    <th>병원</th>
+                    <th>연락처</th>
+                    <th>주소</th>
+                    <th><button type="button" th:onclick="distSort()" th:text="거리"></button></th>
+                    <th>비고</th>
+                </tr>
+                </thead>
+                <tbody class="hospital_content_container">
+
+                </tbody>
+            </table>
+        </form>
+        <!--출력 요소-->
+    </div>
+
+    <div id="map"></div>
+</div>
+
+
+
+
+</html>
+
+<!--<div th:with="start=${(hospitalList.number/maxPage)*maxPage + 1}, end=(${(hospitalList.totalPages == 0) ? 1 : (start + (maxPage -1 ) < hospitalList.totalPages ? start + (maxPage - 1) : hospitalList.totalPages)})">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item" th:classappend="${hospitalList.first}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${hospitalList.number - 1} + ')'" aria-label='Previous' class="page-link">
+                        <span aria-hidden="true">Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${hospitalList.number eq page-1}?'active':''">
+                  <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+                <li class="page-item" th:classappend="${hospitalList.last}?'disabled'">
+                    <a th:onclick="'javascript:page(' + ${hospitalList.number +1} + ')'" aria-label="Next" class="page-link">
+                        <span aria-hidden="true">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </div>-->
+
+
+
+
+
+
+
+
+
+
+
+
+

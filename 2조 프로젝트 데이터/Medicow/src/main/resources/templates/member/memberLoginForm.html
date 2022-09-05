@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+    <style>
+        .logo-img{
+                margin-top: 50px;
+                width: 300px;
+                height: 150px;
+        }
+        .container-header{background-color: rgb(182 168 168 / 6%);}
+    </style>
+</th:block>
+
+<div class="login_container" layout:fragment="content">
+    <div class="user_login_container">
+        <!-- login form -->
+        <form action="/user/members/login" role="form" method="post">
+            <img th:src="@{/image/medicow_logo.png}" class="logo-img">
+            <h2>Log in</h2>
+            <input type="text" name="email" id="memberEmail" placeholder="Email" autofocus>
+            <input type="password" name="password" id="password" placeholder="Password">
+            <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+            <button>log in</button>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        </form>
+        <!-- login from end-->
+    </div>
+    <div class="user_register_container">
+        <img th:src="@{/image/person.png}" alt="">
+        <h3>Hello,MediCow!</h3>
+        <h5>메디카우에 가입하여 더 많은 서비스를 사용하세요</h5>
+        <button class="register-btn"><a href="/user/members/join">REGISTER</a></button>
+    </div>
+</div>
+</html>

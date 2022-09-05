@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<th:block layout:fragment="css">
+    <style>
+
+    .content2{
+        height:100vh;
+    }
+    #titleZone,#bottomZone {width: 90%;
+    margin: 2% auto;}
+    #titleZone{height:100px;} #bottomZone{height:auto;}
+    #zone1{width:20%; height:100px; display:inline-block; float:left; text-align:center; padding-top:30px;     font-weight: 550;}
+    #zone2{width:75%; height:100px; margin-left:5%; display:inline-block; float:left; text-align:center;}
+    #selectZone,#boardZone{width:50%; display:inline-block; float:left; }
+    #zone4,#zone6{ width:40%; margin-left:10%; display:inline-block; float:left;}
+    #zone3,#zone5{width:40%;  display:inline-block; float:left;}
+    #zone7, #zone8{width:100%; display:inline-block; float:left;}
+    #zone1,#zone2,#zone3,#zone4,#zone5,#zone6,#zone7,#zone8   { border-radius: 10px;
+    background: #e7e9ff40;
+    box-shadow: 10px 10px 10px #e6edffc2;}
+    #zone3, #zone4,#zone7{margin-bottom:20px;}
+
+    .se{height:200px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position:relative;
+    }
+    .se p{
+           margin-top: -10px;
+    padding-top: 10px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    font-size: 17px;
+    font-weight: 550;
+    color: #737277;
+    }
+    .se p a{
+        color: #737277;
+
+    }
+    .se span{
+           font-size: 20px;
+    font-weight: 550;
+    color: #2b263ebf;
+    }
+
+
+.se p {
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    font-size: 17px;
+    font-weight: 550;
+    color: #737277;
+}
+.pTop {
+       background: rgb(0 123 255 / 8%);
+    border: 1px solid rgb(0 123 255 / 8%);
+    border-radius: 10px 10px 0 0;
+     }
+span.su{
+    font-size: 60px;
+    text-shadow: 2px 2px 1px;
+    color: #152869c9;
+}
+.board2{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    font-size: 15px;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #e4eaff59;
+    border-bottom-left-radius: 15px;
+    padding-left: 10px;
+    border-bottom-right-radius: 15px;
+    box-shadow: 4px 4px 2px #4074ed17;
+    color: #00052eb3;
+    font-weight: 550;
+}
+.board{
+width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 40px;
+}
+
+.board1{
+margin-bottom: 10px;
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px
+}
+    </style>
+
+</th:block>
+
+<div class="content2" layout:fragment="content">
+    <div id="titleZone">
+        <div id="zone1" style="color:#00498C; font-size: 30px;">오늘 날짜</div>
+        <div id="zone2"><span id="clock" style="color:#00498C; font-size: 70px;">clock</span>
+            <span id="apm" style="color:#00498C; font-size: 35px;">ampm</span></div>
+        <th:block layout:fragment="script">
+            <script th:inline="javascript">
+                var Target = document.getElementById("clock");
+                var Target_apm = document.getElementById("apm");
+                function clock() {
+                var time = new Date();
+                var hours = time.getHours();
+                var minutes = time.getMinutes();
+                var seconds = time.getSeconds();
+                var AmPm ="AM";
+                if(hours > 12){
+                var AmPm ="PM";
+                hours %= 12;
+                }
+
+                var Target2 = document.getElementById("zone1");
+                var month = time.getMonth();
+                var date = time.getDate();
+                var day = time.getDay();
+                var week = ['일', '월', '화', '수', '목', '금', '토'];
+
+                Target2.innerText = `${month + 1}월 ${date}일  ${week[day]}요일 `;
+
+                Target.innerText =
+                `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+
+                Target_apm.innerText = `${AmPm}`;
+
+                }
+                clock();
+                setInterval(clock, 1000); // 1초마다 실행
+            </script>
+        </th:block>
+    </div>
+    <div id="bottomZone">
+        <div id="selectZone">
+            <div class="se" id="zone3">
+                <p class="pTop">현재 예약 환자 수</p>
+                <span class="su" th:text="${mainDto.curReservationNo}"></span></div>
+            <div class="se" id="zone4">
+                <p class="pTop">오늘 운영 시간</p>
+                <span th:if="${mainDto.startDateTime}" th:text="${mainDto.startDateTime}">!!!!!</span>
+                <span th:unless="${mainDto.startDateTime}" th:text="휴무일">~~~~~</span>
+                <span th:if="${mainDto.startDateTime}">~</span>
+                <span th:text="${mainDto.endDateTime}"></span>
+
+            </div>
+            <div class="se" id="zone5">
+                <p class="pTop">예약 대기 인원 수</p>
+                <span  class="su" th:text="${mainDto.curWaitingNo}"></span>
+            </div>
+            <div class="se" id="zone6">
+                <p class="pTop">병원 관련 리뷰 수</p>
+                <div>
+                    <span>리뷰수 : </span> <span th:text="${mainDto.reviewCount}"></span>
+                </div>
+                <div style="margin-top:10px;">
+                    <span>평점 : </span><span th:text="${mainDto.reviewTotal}"></span>
+                </div>
+
+            </div>
+
+        </div>
+        <div id="boardZone">
+            <div class="se" id="zone7">
+                <p class="pTop"><a  href="/hospital/notice"> 공지사항 바로가기</a></p>
+                <div class="board">
+
+                    <div  class="border1" th:each="notice, status : ${mainDto.noticeFormDtos}">
+                        <!--                    <span>제목 </span>-->
+                        <div class="board2" th:text="${notice.subject}"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="se" id="zone8">
+                <p class="pTop"> <a  href="/hospital/contact"> 문의사항 바로가기</a></p>
+                <div class="board">
+
+                    <div class="border1" th:each="contact, status : ${mainDto.ContactFormDtos}">
+                        <!--                    <span>제목 </span>-->
+                        <div class="board2" th:text="${contact.subject}"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

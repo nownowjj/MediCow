@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- 사용자 스크립트 추가 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<style>
+    select{
+        margin-right:10px;
+    }
+</style>
+
+<div layout:fragment="content">
+    <table class="table">
+        <thead>
+        <tr>
+            <th width="15%">글번호</th>
+            <th th:text="${notice.id}"></th>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <th th:text="${notice.subject}"></th>
+        </tr>
+        <tr>
+            <th>시간</th>
+            <th th:text="${#temporals.format(notice.regTime, 'yyyy-MM-dd HH:mm')}"></th>
+        </tr>
+        </thead>
+    </table>
+    <br/>
+    <textarea type="text" th:field="*{notice.content}" style="background-color:white" class="form-control" rows="10" id="test" name="text" readonly="readonly"></textarea>
+
+    <input type="button" value="뒤로가기" onclick="history.back(-1)">
+
+
+</div>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{hospital/layouts/h_layout2}">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <form th:action="@{'/hospital/my/contact/new'}" role="form" method="post" th:object="${datas}">
+        <table class="table table-hover">
+            <!--        <tr>-->
+            <!--            <th>게시판 번호</th>-->
+            <!--            <th th:text="${contactFromDto.id}">응 없~</th>-->
+            <!--        </tr>-->
+<!--            게시판 번호는 알아서 생성될 예정-->
+<!--            <tr>-->
+<!--                <th>작성자</th>-->
+<!--                &lt;!&ndash;            <th th:text="${contactFromDto.hosName}"></th>&ndash;&gt;-->
+<!--                <th>작성일자</th>-->
+<!--                <th th:field="*{reqTime}" th:text="*{regTime}"></th>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <th>작성일자</th>-->
+<!--                <th th:text="*{regTime}"></th>-->
+<!--&lt;!&ndash;                <th>답변 여부</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                <th th:text="${contactFromDto.contactStatus}"></th>&ndash;&gt;-->
+<!--            </tr>-->
+            <tr>
+                <th>작성자</th>
+                <td th:text="${hospital.hosId}"></td>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <td> <input type="text" th:field="*{subject}" th:text="*{subject}" placeholder="제목을 입력해주세요"></td>
+            </tr>
+            <tr>
+                <th>문의 사항</th>
+                <td>
+                    <textarea type="text" th:field="*{content}" class="form-control" rows="10" id="test"  placeholder="내용을 입력해주세요"></textarea>
+                </td>
+            </tr>
+
+
+        </table>
+        <button type="submit" class="btn btn-primary">등록하기</button>
+    </form>
+</div>
+
+</body>
+</html>
